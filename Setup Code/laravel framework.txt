@@ -1,0 +1,23 @@
+php laravel setup
+php(xampp)
+nodejs
+composer
+laravel
+bite
+
+frontend=>
+
+backend=>
+
+M-middelware
+V-view
+C-controller
+
+C-create
+R-read
+U-update
+D-delete
+validation(input,password)
+
+blade->web->controller
+
