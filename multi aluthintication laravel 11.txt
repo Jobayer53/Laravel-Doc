@@ -1,0 +1,97 @@
+create model + migration + controller + middleware +  providers  
+#Touch the api using this command->
+php artisan install:api
+
+#Update model: 
+<<<<START CODE >>>>
+
+namespace App\Models;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+class Admin extends Authenticatable
+{
+    use HasFactory, Notifiable;
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
+
+}
+
+ <<<< END CODE >>>>
+
+#Update migration: 
+   << create tables as your requerment >>
+
+#Update controller:
+    << no code here >>
+#Update middleware: 
+create middleware using this command->
+ php artisan make:middleware AdminMiddleware //or name as you want. 
+ <<<<START CODE >>>>
+
+    if (Auth::guard('admin')->check()) {
+            return $next($request);
+        }
+    return redirect('/login'); // Or any other route you want to redirect to
+
+ <<<< END CODE >>>>
+
+#Update providers:
+first create the provider using this comman-> 
+    php artisan make:provider RouteServiceProvider // or name as you want. 
+<- overwrite these datas ->
+<<<<START CODE >>>>
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+
+//update boot function
+public function boot()
+{
+    // Register the middleware group for admin
+    Route::middlewareGroup('admin', [
+        \App\Http\Middleware\AdminMiddleware::class,
+    ]);
+
+    parent::boot();
+}
+
+ <<<< END CODE >>>>
+
+#Update config/auth.php:
+<<<<START CODE >>>>
+
+  'guards' => [
+        
+        'admin' => [
+        'driver' => 'session',
+        'provider' => 'admins',
+        ],
+    ],
+    'providers' => [
+       
+        'admins' => [
+        'driver' => 'eloquent',
+        'model' => env('AUTH_MODEL', App\Models\Admin::class),
+        ],
+    ],
+
+ <<<< END CODE >>>>
+ #Update bootstrap/provider.php:
+    App\Providers\RouteServiceProvider::class, //or as your provider name.
+
+#Update route:
+Route::middleware(['admin'])->group(function(){
+    //routes for admin
+});
+#To login and logout admin:
+    $admin = Admin::where('email', $request->email)->first();
+    Auth::guard('admin')->login($admin); // for login User
+    
+    <-write this code in function to logout user->
+    Auth::guard('admin')->logout();  // for logout user
