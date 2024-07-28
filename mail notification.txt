@@ -1,0 +1,31 @@
+Laravel 11
+#php artisan make:notification Appointment
+
+#on controller write this to send a notificaiton mail
+
+$user = Auth::user();
+$message = 'your message here';
+$user->notify(new Appointment($message));
+
+
+#on appointment.php 
+
+public $message;
+/**
+* Create a new notification instance.
+*/
+public function __construct($message)
+{
+   $this->message = $message;
+}
+#edit toMail function as your requirement
+#update your env
+ 
+MAIL_MAILER=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=username
+MAIL_PASSWORD=password
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"

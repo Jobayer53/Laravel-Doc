@@ -1,0 +1,42 @@
+Laravel 11
+
+#php artisan make:mail NotificationMail
+
+#create a MailCotroller
+
+#crate a blade to show as a mail
+
+#on controller write this code so send mail and data to mail blade
+
+use Illuminate\Support\Facades\Mail;
+
+  Mail::to('mailaddress')->send(new NotificationMail('pass data to show on mail blade'));
+
+#on NotificationMail.php 
+public $data;
+/**
+* Create a new message instance.
+*/
+public function __construct($data)
+{
+   $this->data = $data;
+}
+
+public function content(): Content
+{
+    return new Content(
+       view: 'blade.name',
+       with:['data' => $this->data],
+    );
+}
+#you can change subject on envelope() as your app requierment;
+#update your env
+ 
+MAIL_MAILER=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=username
+MAIL_PASSWORD=password
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
