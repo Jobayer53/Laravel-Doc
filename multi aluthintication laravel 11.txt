@@ -13,7 +13,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Admin extends Authenticatable
 {
     use HasFactory, Notifiable;
-
     protected $fillable = [
         'name',
         'email',
@@ -21,14 +20,17 @@ class Admin extends Authenticatable
     ];
 
 }
-
  <<<< END CODE >>>>
 
+
 #Update migration: 
-   << create tables as your requerment >>
+<< create tables as your requerment >>
+
 
 #Update controller:
-    << no code here >>
+<< no code here >>
+
+
 #Update middleware: 
 create middleware using this command->
  php artisan make:middleware AdminMiddleware //or name as you want. 
@@ -45,8 +47,8 @@ create middleware using this command->
 first create the provider using this comman-> 
     php artisan make:provider RouteServiceProvider // or name as you want. 
 <- overwrite these datas ->
-<<<<START CODE >>>>
 
+<<<<START CODE >>>>
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -66,18 +68,33 @@ public function boot()
 #Update config/auth.php:
 <<<<START CODE >>>>
 
+
   'guards' => [
-        
+        //copy and paste inside gaurds
+
         'admin' => [
         'driver' => 'session',
         'provider' => 'admins',
         ],
     ],
+
+    
     'providers' => [
-       
+        //copy and paste this inside providers
+        
         'admins' => [
         'driver' => 'eloquent',
-        'model' => env('AUTH_MODEL', App\Models\Admin::class),
+        'model' =>App\Models\Admin::class,
+        ],
+    ],
+    'passwords' => [
+        //copy and paste this inside passwords
+
+         'admins' => [
+            'provider' => 'admins',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
         ],
     ],
 
